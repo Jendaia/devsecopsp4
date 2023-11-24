@@ -465,20 +465,7 @@ function dvwaButtonSourceHtmlGet( $pId ) {
 }
 
 
-// Database Management --
 
-if( $DBMS == 'MySQL' ) {
-	$DBMS = htmlspecialchars(strip_tags( $DBMS ));
-	$DBMS_errorFunc = 'mysqli_error()';
-}
-elseif( $DBMS == 'PGSQL' ) {
-	$DBMS = htmlspecialchars(strip_tags( $DBMS ));
-	$DBMS_errorFunc = 'pg_last_error()';
-}
-else {
-	$DBMS = "No DBMS selected.";
-	$DBMS_errorFunc = '';
-}
 
 //$DBMS_connError = '
 //	<div align="center">
@@ -490,10 +477,23 @@ else {
 function dvwaDatabaseConnect() {
 	global $_DVWA;
 	global $DBMS;
-	//global $DBMS_connError;
+	global $DBMS_connError = "";
 	global $db;
 	global $sqlite_db_connection;
+	// Database Management --
 
+	if( $DBMS == 'MySQL' ) {
+		$DBMS = htmlspecialchars(strip_tags( $DBMS ));
+		$DBMS_errorFunc = 'mysqli_error()';
+	}
+	elseif( $DBMS == 'PGSQL' ) {
+		$DBMS = htmlspecialchars(strip_tags( $DBMS ));
+		$DBMS_errorFunc = 'pg_last_error()';
+	}
+	else {
+		$DBMS = "No DBMS selected.";
+		$DBMS_errorFunc = '';
+	}
 	if( $DBMS == 'MySQL' ) {
 		if( !@($GLOBALS["___mysqli_ston"] = mysqli_connect( $_DVWA[ 'db_server' ],  $_DVWA[ 'db_user' ],  $_DVWA[ 'db_password' ], "", $_DVWA[ 'db_port' ] ))
 		|| !@((bool)mysqli_query($GLOBALS["___mysqli_ston"], "USE " . $_DVWA[ 'db_database' ])) ) {
